@@ -18,44 +18,54 @@ window.Vue = require('vue');
 Vue.component('chat-message', require('./components/ChatMessage.vue'));
 Vue.component('chat-log', require('./components/ChatLog.vue'));
 Vue.component('chat-composer', require('./components/ChatComposer.vue'));
+Vue.component('chat-room-list', require('./components/ChatRoomList.vue'));
+Vue.component('chat-room', require('./components/ChatRoom.vue'));
 
 const app = new Vue({
     el: '#app',
     data: {
-        messages: [],
-        usersInRoom: []
+        rooms: [],
+        selectedRoom: null,
+        user: $('#app').data('user'),
+        // usersInRoom: [],
     },
     methods: {
         addMessage(message) {
-            // Add to existing messages
-            this.messages.push(message);
+            const newMessage = { ...message, user_id: this.user.id, user_name: this.user.name };
+            this.selectedRoom.messages.push(newMessage);
+            this.selectedRoom.last_message = newMessage.message;
 
-            // Persist to the database etc
-            axios.post('/messages', message).then(response => {
-                // Do whatever;
-            })
-        }
+            axios.post('/room/' + this.selectedRoom.id + '/messages', newMessage);
+        },
+        selectRoom(room) {
+            this.selectedRoom = room;
+
+            axios.get('/room/' + this.selectedRoom.id + '/messages').then(response => {
+                this.selectedRoom.messages = response.data;
+                console.log(this.selectedRoom.messages[0]);
+            });
+        },
     },
     created() {
-        axios.get('/messages').then(response => {
-            this.messages = response.data;
+        axios.get('/rooms').then(response => {
+            this.rooms = response.data.map(room => ({ ...room, messages: [] }));
         });
 
-        Echo.join('chatroom')
-            .here((users) => {
-                this.usersInRoom = users;
-            })
-            .joining((user) => {
-                this.usersInRoom.push(user);
-            })
-            .leaving((user) => {
-                this.usersInRoom = this.usersInRoom.filter(u => u != user);
-            })
-            .listen('MessagePosted', (e) => {
-                this.messages.push({
-                    message: e.message.message,
-                    user: e.user
-                });
-            });
-    }
+        // Echo.join('chatroom')
+        //     .here((users) => {
+        //         this.usersInRoom = users;
+        //     })
+        //     .joining((user) => {
+        //         this.usersInRoom.push(user);
+        //     })
+        //     .leaving((user) => {
+        //         this.usersInRoom = this.usersInRoom.filter(u => u != user);
+        //     })
+        //     .listen('MessagePosted', (e) => {
+        //         this.messages.push({
+        //             message: e.message.message,
+        //             user: e.user
+        //         });
+        //     });
+    },
 });

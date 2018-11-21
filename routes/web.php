@@ -1,7 +1,5 @@
 <?php
 
-use App\Events\MessagePosted;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,33 +11,15 @@ use App\Events\MessagePosted;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/chat', function () {
-    return view('chat');
-})->middleware('auth');
-
-Route::get('/messages', function () {
-    return App\Message::with('user')->get();
-})->middleware('auth');
-
-Route::post('/messages', function () {
-    // Store the new message
-    $user = Auth::user();
-
-    /** @var \App\Message $message */
-    $message = $user->messages()->create([
-        'message' => request()->get('message')
-    ]);
-
-    // Announce that a new message has been posted
-    broadcast(new MessagePosted($message, $user))->toOthers();
-
-    return ['status' => 'OK'];
-})->middleware('auth');
+Route::get('/', 'PageController@welcome')->name('welcome');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', 'PageController@home')->name('home');
+    Route::get('/chat', 'PageController@chat')->name('chat');
+
+    Route::get('/rooms', 'Api\RoomController@rooms');
+    Route::get('/room/{room}/messages', 'Api\RoomController@messages');
+    Route::post('/room/{room}/messages', 'Api\RoomController@storeMessage');
+});

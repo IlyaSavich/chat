@@ -2,44 +2,40 @@
 
 namespace App\Events;
 
-use App\Message;
-use App\User;
-
+use App\Models\Message;
+use App\Models\Room;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
 class MessagePosted implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Message
-     *
-     * @var Message
+     * @var Room
      */
-    public $message;
+    public $room;
 
     /**
-     * User
-     *
      * @var User
      */
     public $user;
 
     /**
-     * Create a new event instance.
-     *
-     * @return void
+     * @var Message
      */
-    public function __construct(Message $message, User $user)
+    public $message;
+
+    public function __construct(Room $room, User $user, Message $message)
     {
-        $this->message = $message;
+        $this->room = $room;
         $this->user = $user;
+        $this->message = $message;
     }
 
     /**
@@ -49,6 +45,6 @@ class MessagePosted implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel('chatroom');
+        return new PresenceChannel("room/{$this->room->id}");
     }
 }
