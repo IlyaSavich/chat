@@ -14335,7 +14335,6 @@ var app = new Vue({
         rooms: [],
         selectedRoom: null,
         user: $('#app').data('user')
-        // usersInRoom: [],
     },
     methods: {
         addMessage: function addMessage(message) {
@@ -14348,11 +14347,22 @@ var app = new Vue({
         selectRoom: function selectRoom(room) {
             var _this = this;
 
+            if (this.selectedRoom) {
+                Echo.leave('room.' + this.selectedRoom.id);
+            }
+
             this.selectedRoom = room;
 
             axios.get('/room/' + this.selectedRoom.id + '/messages').then(function (response) {
                 _this.selectedRoom.messages = response.data;
-                console.log(_this.selectedRoom.messages[0]);
+            });
+
+            Echo.join('room.' + this.selectedRoom.id).listen('MessagePosted', function (e) {
+                _this.selectedRoom.messages.push({
+                    message: e.message.message,
+                    user_id: e.user.id,
+                    user_name: e.user.name
+                });
             });
         }
     },
@@ -14364,23 +14374,6 @@ var app = new Vue({
                 return _extends({}, room, { messages: [] });
             });
         });
-
-        // Echo.join('chatroom')
-        //     .here((users) => {
-        //         this.usersInRoom = users;
-        //     })
-        //     .joining((user) => {
-        //         this.usersInRoom.push(user);
-        //     })
-        //     .leaving((user) => {
-        //         this.usersInRoom = this.usersInRoom.filter(u => u != user);
-        //     })
-        //     .listen('MessagePosted', (e) => {
-        //         this.messages.push({
-        //             message: e.message.message,
-        //             user: e.user
-        //         });
-        //     });
     }
 });
 

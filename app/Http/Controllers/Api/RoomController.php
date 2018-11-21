@@ -8,6 +8,7 @@ use App\Http\Requests\CreateMessageRequest;
 use App\Models\Message;
 use App\Models\Room;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class RoomController extends Controller
 {
@@ -19,7 +20,9 @@ class RoomController extends Controller
         $rooms = Room::select('rooms.*')
             ->join('room_user', 'room_user.room_id', '=', 'rooms.id')
             ->where('room_user.user_id', $user->id)
-            ->with(['messages', 'users'])
+            ->with(['messages', 'users' => function (BelongsToMany $query) use ($user) {
+                return $query->where('users.id', '!=', $user->id);
+            }])
             ->get();
 
         return $rooms->map(function (Room $room) {
@@ -58,7 +61,7 @@ class RoomController extends Controller
             'message' => $request->message,
         ]);
 
-        //broadcast(new MessagePosted($room, $user, $message))->toOthers();
+        broadcast(new MessagePosted($room, $user, $message))->toOthers();
 
         return ['status' => 'OK'];
     }

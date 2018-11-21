@@ -45,6 +45,6 @@ class MessagePosted implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel("room/{$this->room->id}");
+        return new PresenceChannel("room.{$this->room->id}");
     }
 }

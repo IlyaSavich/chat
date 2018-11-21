@@ -27,7 +27,6 @@ const app = new Vue({
         rooms: [],
         selectedRoom: null,
         user: $('#app').data('user'),
-        // usersInRoom: [],
     },
     methods: {
         addMessage(message) {
@@ -38,34 +37,29 @@ const app = new Vue({
             axios.post('/room/' + this.selectedRoom.id + '/messages', newMessage);
         },
         selectRoom(room) {
+            if (this.selectedRoom) {
+                Echo.leave('room.' + this.selectedRoom.id);
+            }
+
             this.selectedRoom = room;
 
             axios.get('/room/' + this.selectedRoom.id + '/messages').then(response => {
                 this.selectedRoom.messages = response.data;
-                console.log(this.selectedRoom.messages[0]);
             });
+
+            Echo.join('room.' + this.selectedRoom.id)
+                .listen('MessagePosted', (e) => {
+                    this.selectedRoom.messages.push({
+                        message: e.message.message,
+                        user_id: e.user.id,
+                        user_name: e.user.name,
+                    });
+                });
         },
     },
     created() {
         axios.get('/rooms').then(response => {
             this.rooms = response.data.map(room => ({ ...room, messages: [] }));
         });
-
-        // Echo.join('chatroom')
-        //     .here((users) => {
-        //         this.usersInRoom = users;
-        //     })
-        //     .joining((user) => {
-        //         this.usersInRoom.push(user);
-        //     })
-        //     .leaving((user) => {
-        //         this.usersInRoom = this.usersInRoom.filter(u => u != user);
-        //     })
-        //     .listen('MessagePosted', (e) => {
-        //         this.messages.push({
-        //             message: e.message.message,
-        //             user: e.user
-        //         });
-        //     });
     },
 });
