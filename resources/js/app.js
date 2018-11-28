@@ -1,3 +1,4 @@
+import swal from 'sweetalert';
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -30,9 +31,9 @@ const app = new Vue({
     },
     methods: {
         addMessage(message) {
-            const newMessage = { ...message, user_id: this.user.id, user_name: this.user.name };
+            const newMessage = { ...message, user: this.user };
             this.selectedRoom.messages.push(newMessage);
-            this.selectedRoom.last_message = newMessage.message;
+            this.selectedRoom.last_message = newMessage;
 
             axios.post('/room/' + this.selectedRoom.id + '/messages', newMessage);
         },
@@ -51,15 +52,30 @@ const app = new Vue({
                 .listen('MessagePosted', (e) => {
                     this.selectedRoom.messages.push({
                         message: e.message.message,
-                        user_id: e.user.id,
-                        user_name: e.user.name,
+                        user: e.user,
                     });
                 });
         },
+        createRoom() {
+            swal('What\'s the new chat name?', {
+                content: 'input',
+            }).then((name) => {
+                axios.post('/rooms/create', { name }).then(() => {
+                    this.fetchAllRooms().then(() => {
+                        swal(`The room [${name}] created successfully.`);
+                    });
+                });
+            });
+        },
+        fetchAllRooms() {
+            return axios.get('/rooms').then(response => {
+                this.rooms = response.data.map(room => ({ ...room, messages: [] }));
+            });
+        },
     },
     created() {
-        axios.get('/rooms').then(response => {
-            this.rooms = response.data.map(room => ({ ...room, messages: [] }));
+        this.fetchAllRooms().then(() => {
+            this.selectRoom(this.rooms[0] || null);
         });
     },
 });

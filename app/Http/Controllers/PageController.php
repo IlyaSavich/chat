@@ -14,16 +14,6 @@ class PageController extends Controller
         return view('welcome');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function home()
-    {
-        return view('home');
-    }
-
     public function chat()
     {
         return view('chat');

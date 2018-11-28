@@ -16,10 +16,10 @@ Route::get('/', 'PageController@welcome')->name('welcome');
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/home', 'PageController@home')->name('home');
     Route::get('/chat', 'PageController@chat')->name('chat');
 
     Route::get('/rooms', 'Api\RoomController@rooms');
+    Route::post('/rooms/create', 'Api\RoomController@createRoom');
     Route::get('/room/{room}/messages', 'Api\RoomController@messages');
     Route::post('/room/{room}/messages', 'Api\RoomController@storeMessage');
 });

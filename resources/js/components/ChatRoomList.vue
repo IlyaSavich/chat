@@ -1,6 +1,6 @@
 <template>
     <div class="chat-room-list">
-        <chat-room v-for="room in rooms" :room="room" :key="room.id" v-on:selectroom="selectRoom"></chat-room>
+        <chat-room v-for="room in rooms" :room="room" :selected="selectedRoom && room.id === selectedRoom.id" :key="room.id" v-on:selectroom="selectRoom"></chat-room>
         <div class="empty" v-show="rooms.length === 0">
             No rooms yet!
         </div>
@@ -9,7 +9,7 @@
 
 <script>
     export default {
-        props: ['rooms'],
+        props: ['rooms', 'selectedRoom'],
         methods: {
             selectRoom(room) {
                 this.$emit('selectroom', room);

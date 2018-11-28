@@ -25,6 +25,7 @@ export default {
 
 <style lang="css">
 .chat-composer {
+    margin-top: 20px;
     display: flex;
 }
 
