@@ -19,7 +19,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chat', 'PageController@chat')->name('chat');
 
     Route::get('/rooms', 'Api\RoomController@rooms');
-    Route::post('/rooms/create', 'Api\RoomController@createRoom');
-    Route::get('/room/{room}/messages', 'Api\RoomController@messages');
-    Route::post('/room/{room}/messages', 'Api\RoomController@storeMessage');
+    Route::post('/rooms/create', 'Api\RoomController@create');
+    Route::delete('/room/{id}', 'Api\RoomController@delete')->middleware('room-owner');
+
+    Route::get('/room/{room}/messages', 'Api\MessageController@messages');
+    Route::post('/room/{room}/messages', 'Api\MessageController@create');
 });

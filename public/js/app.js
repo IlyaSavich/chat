@@ -14414,60 +14414,123 @@ var app = new Vue({
     },
     methods: {
         addMessage: function addMessage(message) {
-            var newMessage = _extends({}, message, { user: this.user });
-            this.selectedRoom.messages.push(newMessage);
-            this.selectedRoom.last_message = newMessage;
+            var newMessage = _extends({}, message, { user: this.user, created_at: new Date().toISOString() });
+            this.addMessageToRoom(this.selectedRoom, newMessage);
 
-            axios.post('/room/' + this.selectedRoom.id + '/messages', newMessage);
+            axios.post('/room/' + this.selectedRoom.id + '/messages', _extends({}, newMessage, { user_id: this.user.id }));
         },
         selectRoom: function selectRoom(room) {
             var _this = this;
 
-            if (this.selectedRoom) {
-                Echo.leave('room.' + this.selectedRoom.id);
+            if (this.selectedRoom && this.selectedRoom.id === room.id) {
+                return;
             }
 
             this.selectedRoom = room;
+            this.selectedRoom.unread = false;
 
             axios.get('/room/' + this.selectedRoom.id + '/messages').then(function (response) {
                 _this.selectedRoom.messages = response.data;
             });
+        },
+        fetchAllRooms: function fetchAllRooms() {
+            var _this2 = this;
 
-            Echo.join('room.' + this.selectedRoom.id).listen('MessagePosted', function (e) {
-                _this.selectedRoom.messages.push({
-                    message: e.message.message,
-                    user: e.user
+            return axios.get('/rooms').then(function (response) {
+                _this2.rooms = response.data.map(function (room) {
+                    return _extends({}, room, { messages: [] });
                 });
             });
         },
         createRoom: function createRoom() {
-            var _this2 = this;
+            var _this3 = this;
 
-            __WEBPACK_IMPORTED_MODULE_0_sweetalert___default()('What\'s the new chat name?', {
+            __WEBPACK_IMPORTED_MODULE_0_sweetalert___default()('What\'s the name for new chat?', {
                 content: 'input'
             }).then(function (name) {
-                axios.post('/rooms/create', { name: name }).then(function () {
-                    _this2.fetchAllRooms().then(function () {
-                        __WEBPACK_IMPORTED_MODULE_0_sweetalert___default()('The room [' + name + '] created successfully.');
+                axios.post('/rooms/create', { name: name }).then(function (_ref) {
+                    var data = _ref.data;
+
+                    _this3.fetchAllRooms().then(function () {
+                        _this3.selectRoom(_this3.rooms.find(function (room) {
+                            return room.id === data.room.id;
+                        }));
+                        __WEBPACK_IMPORTED_MODULE_0_sweetalert___default()('The room ' + name + ' created successfully.');
                     });
                 });
             });
         },
-        fetchAllRooms: function fetchAllRooms() {
-            var _this3 = this;
+        deleteRoom: function deleteRoom() {
+            var _this4 = this;
 
-            return axios.get('/rooms').then(function (response) {
-                _this3.rooms = response.data.map(function (room) {
-                    return _extends({}, room, { messages: [] });
+            if (!this.selectedRoom) {
+                return;
+            }
+
+            __WEBPACK_IMPORTED_MODULE_0_sweetalert___default()({
+                title: 'Are you sure?',
+                text: 'Once deleted, you will not be able to recover this room!',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true
+            }).then(function () {
+                return axios.delete('/room/' + _this4.selectedRoom.id).then(function () {
+                    _this4.deleteRoomFromList(_this4.selectedRoom);
+                    __WEBPACK_IMPORTED_MODULE_0_sweetalert___default()('The room ' + name + ' deleted successfully.');
                 });
             });
+        },
+        deleteRoomFromList: function deleteRoomFromList(deletedRoom) {
+            this.rooms = this.rooms.filter(function (room) {
+                return room.id !== deletedRoom.id;
+            });
+            if (this.selectedRoom && this.selectedRoom.id === deletedRoom.id) {
+                this.selectedRoom = this.rooms[0];
+            }
+        },
+        addMessageToRoom: function addMessageToRoom(room, message) {
+            room.messages.push(message);
+            room.last_message = message;
         }
     },
     created: function created() {
-        var _this4 = this;
+        var _this5 = this;
 
         this.fetchAllRooms().then(function () {
-            _this4.selectRoom(_this4.rooms[0] || null);
+            if (_this5.rooms.length > 0) {
+                _this5.selectRoom(_this5.rooms[0]);
+            }
+        });
+
+        Echo.join('user.registration').listen('UserRegistered', function (e) {
+            _this5.fetchAllRooms().then(function () {
+                __WEBPACK_IMPORTED_MODULE_0_sweetalert___default()(e.user.name + ' has joined the chat.');
+            });
+        });
+
+        Echo.join('rooms').listen('RoomCreated', function (e) {
+            var room = e.room;
+
+            _this5.rooms.push(room);
+            __WEBPACK_IMPORTED_MODULE_0_sweetalert___default()('Room ' + room.name + ' has been created.');
+        }).listen('RoomDeleted', function (e) {
+            var roomId = e.roomId;
+            var room = _this5.rooms.find(function (room) {
+                return room.id === roomId;
+            });
+
+            _this5.deleteRoomFromList(room);
+            __WEBPACK_IMPORTED_MODULE_0_sweetalert___default()('Room ' + room.name + ' has been deleted.');
+        }).listen('MessagePosted', function (e) {
+            var messagedRoom = _this5.rooms.find(function (room) {
+                return room.id === e.room.id;
+            });
+
+            _this5.addMessageToRoom(messagedRoom, e.message);
+
+            if (messagedRoom.id !== _this5.selectedRoom.id) {
+                messagedRoom.unread = true;
+            }
         });
     }
 });
@@ -58269,6 +58332,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['room', 'selected'],
@@ -58295,6 +58359,12 @@ var render = function() {
       on: { click: _vm.selectRoom }
     },
     [
+      _vm.room.unread
+        ? _c("div", { staticClass: "badge badge-info float-right" }, [
+            _vm._v("!")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
       _c("p", { staticClass: "title" }, [_vm._v(_vm._s(_vm.room.name))]),
       _vm._v(" "),
       _vm.room.last_message

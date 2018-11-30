@@ -17,7 +17,10 @@ class CreateRoomsTable extends Migration
             $table->increments('id');
             $table->string('name')->nullable();
             $table->string('type');
+            $table->unsignedInteger('owner_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('owner_id')->references('id')->on('users');
         });
     }
 

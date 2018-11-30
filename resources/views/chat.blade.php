@@ -17,9 +17,12 @@
                 <div class="card card-default">
                     <div class="card-header">
                         @{{ selectedRoom ? selectedRoom.name : "Chatroom" }}
-                        <span class="badge badge-dark float-right" v-show="selectedRoom && selectedRoom.type !== 'dialog'">
+                        <span class="badge badge-dark" v-show="selectedRoom && selectedRoom.type !== 'dialog'">
                             @{{ selectedRoom ? selectedRoom.users_count : 0 }}
                         </span>
+                        <i class="badge badge-danger float-right chat-delete"
+                           v-show="selectedRoom && selectedRoom.type !== 'dialog' && selectedRoom.owner_id === user.id"
+                           v-on:click="deleteRoom">X</i>
                     </div>
 
                     <div class="card-body">

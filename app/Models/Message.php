@@ -29,6 +29,7 @@ class Message extends Model
         'room_id',
         'user_id',
         'message',
+        'created_at',
     ];
 
     public function user()

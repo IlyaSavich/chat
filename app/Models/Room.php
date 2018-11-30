@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -22,6 +23,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Room whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Room whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int|null $owner_id
+ * @property-read \App\Models\User|null $owner
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Room whereOwnerId($value)
  */
 class Room extends Model
 {
@@ -31,7 +35,13 @@ class Room extends Model
     protected $fillable = [
         'name',
         'type',
+        'owner_id',
     ];
+
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
 
     public function users(): BelongsToMany
     {

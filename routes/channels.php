@@ -11,13 +11,12 @@
 |
 */
 
-use App\Models\User;
+use App\Models\{User, Room};
 
-Broadcast::channel('App.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+Broadcast::channel('user.registration', function (User $user) {
+    return $user;
 });
 
-Broadcast::channel('room.{id}', function ($user, $roomId) {
+Broadcast::channel('rooms', function ($user) {
     return $user;
-    //return \DB::table('room_user')->where('room_id', $roomId)->where('user_id', $user->id)->exists();
 });

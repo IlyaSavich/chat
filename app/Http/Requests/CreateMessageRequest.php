@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property-read int $user_id
  * @property-read string $message
+ * @property-read string $created_at
  */
 class CreateMessageRequest extends FormRequest
 {
@@ -30,6 +31,7 @@ class CreateMessageRequest extends FormRequest
         return [
             'user_id' => 'required|exists:users,id',
             'message' => 'required|string',
+            'created_at' => 'required|date',
         ];
     }
 }

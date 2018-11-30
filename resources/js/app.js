@@ -31,51 +31,105 @@ const app = new Vue({
     },
     methods: {
         addMessage(message) {
-            const newMessage = { ...message, user: this.user };
-            this.selectedRoom.messages.push(newMessage);
-            this.selectedRoom.last_message = newMessage;
+            const newMessage = {...message, user: this.user, created_at: new Date().toISOString()};
+            this.addMessageToRoom(this.selectedRoom, newMessage);
 
-            axios.post('/room/' + this.selectedRoom.id + '/messages', newMessage);
+            axios.post('/room/' + this.selectedRoom.id + '/messages', {...newMessage, user_id: this.user.id});
         },
         selectRoom(room) {
-            if (this.selectedRoom) {
-                Echo.leave('room.' + this.selectedRoom.id);
+            if (this.selectedRoom && this.selectedRoom.id === room.id) {
+                return;
             }
 
             this.selectedRoom = room;
+            this.selectedRoom.unread = false;
 
             axios.get('/room/' + this.selectedRoom.id + '/messages').then(response => {
                 this.selectedRoom.messages = response.data;
             });
-
-            Echo.join('room.' + this.selectedRoom.id)
-                .listen('MessagePosted', (e) => {
-                    this.selectedRoom.messages.push({
-                        message: e.message.message,
-                        user: e.user,
-                    });
-                });
-        },
-        createRoom() {
-            swal('What\'s the new chat name?', {
-                content: 'input',
-            }).then((name) => {
-                axios.post('/rooms/create', { name }).then(() => {
-                    this.fetchAllRooms().then(() => {
-                        swal(`The room [${name}] created successfully.`);
-                    });
-                });
-            });
         },
         fetchAllRooms() {
             return axios.get('/rooms').then(response => {
-                this.rooms = response.data.map(room => ({ ...room, messages: [] }));
+                this.rooms = response.data.map(room => ({...room, messages: []}));
             });
+        },
+        createRoom() {
+            swal('What\'s the name for new chat?', {
+                content: 'input',
+            }).then((name) => {
+                axios.post('/rooms/create', {name}).then(({data}) => {
+                    this.fetchAllRooms().then(() => {
+                        this.selectRoom(this.rooms.find((room) => room.id === data.room.id));
+                        swal(`The room ${name} created successfully.`);
+                    });
+                });
+            });
+        },
+        deleteRoom() {
+            if (!this.selectedRoom) {
+                return;
+            }
+
+            swal({
+                title: 'Are you sure?',
+                text: 'Once deleted, you will not be able to recover this room!',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then(() =>
+                axios.delete('/room/' + this.selectedRoom.id).then(() => {
+                    this.deleteRoomFromList(this.selectedRoom);
+                    swal(`The room ${name} deleted successfully.`);
+                }),
+            );
+        },
+        deleteRoomFromList(deletedRoom) {
+            this.rooms = this.rooms.filter((room) => room.id !== deletedRoom.id);
+            if (this.selectedRoom && this.selectedRoom.id === deletedRoom.id) {
+                this.selectedRoom = this.rooms[0];
+            }
+        },
+        addMessageToRoom(room, message) {
+            room.messages.push(message);
+            room.last_message = message;
         },
     },
     created() {
         this.fetchAllRooms().then(() => {
-            this.selectRoom(this.rooms[0] || null);
+            if (this.rooms.length > 0) {
+                this.selectRoom(this.rooms[0]);
+            }
         });
+
+        Echo.join('user.registration')
+            .listen('UserRegistered', (e) => {
+                this.fetchAllRooms().then(() => {
+                    swal(`${e.user.name} has joined the chat.`);
+                });
+            });
+
+        Echo.join('rooms')
+            .listen('RoomCreated', (e) => {
+                const room = e.room;
+
+                this.rooms.push(room);
+                swal(`Room ${room.name} has been created.`);
+            })
+            .listen('RoomDeleted', (e) => {
+                const roomId = e.roomId;
+                const room = this.rooms.find((room) => room.id === roomId);
+
+                this.deleteRoomFromList(room);
+                swal(`Room ${room.name} has been deleted.`);
+            })
+            .listen('MessagePosted', (e) => {
+                const messagedRoom = this.rooms.find((room) => room.id === e.room.id);
+
+                this.addMessageToRoom(messagedRoom, e.message);
+
+                if (messagedRoom.id !== this.selectedRoom.id) {
+                    messagedRoom.unread = true;
+                }
+            });
     },
 });

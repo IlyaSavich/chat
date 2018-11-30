@@ -1,5 +1,6 @@
 <template>
     <div class="chat-room" v-bind:class="{ active: selected }" @click="selectRoom">
+        <div v-if="room.unread" class="badge badge-info float-right">!</div>
         <p class="title">{{ room.name }}</p>
         <p v-if="room.last_message" class="message-preview">{{ room.last_message.user.name + ': ' + room.last_message.message }}</p>
         <i v-else class="message-preview">No messages yet!</i>

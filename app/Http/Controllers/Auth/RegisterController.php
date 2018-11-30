@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\Room;
-use App\Models\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use App\Services\RegistrationService;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
@@ -32,13 +30,20 @@ class RegisterController extends Controller
     protected $redirectTo = '/chat';
 
     /**
+     * @var RegistrationService
+     */
+    private $registrationService;
+
+    /**
      * Create a new controller instance.
      *
-     * @return void
+     * @param RegistrationService $registrationService
      */
-    public function __construct()
+    public function __construct(RegistrationService $registrationService)
     {
         $this->middleware('guest');
+
+        $this->registrationService = $registrationService;
     }
 
     /**
@@ -66,25 +71,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-
-        $this->createDialogsWithEachUser($user);
-
-        return $user;
-    }
-
-    private function createDialogsWithEachUser(User $user)
-    {
-        $otherUsers = User::where('id', '!=', $user->id)->get();
-
-        foreach ($otherUsers as $anotherUser) {
-            $room = Room::create(['type' => Room::TYPE_DIALOG]);
-            $room->users()->attach($user);
-            $room->users()->attach($anotherUser);
-        }
+        return $this->registrationService->createUser($data);
     }
 }
