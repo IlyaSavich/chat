@@ -98,3 +98,12 @@ For development you can run watcher
 For daily usage you only need to run homestead box in your Homestead directory
 
     vagrant up
+
+### How it works?
+
+- On chat page there is list of all available rooms with previewed last message. Each room is either dialog with another user or public room where all registered users can message. To open specific room just to click over room name
+- To create a new public room you need to click `+` button on the Chats card header and enter name of the new room. Once you confirmed creation the new room each user will receive notification via websocket that a new room was created. Only creator of the room can delete it and also each user will receive notification that room was deleted.
+- After new user registration dialog with each user will be automatically created and new user will be joined to each public room. Each user online will receive notification that new user have registered.
+- If someone will message in not active room (which you are not selected) you will see `!` sign in the Chats list in opposite of room name. Also previewed message will be updated.
+- In opened public room you can see count of users in the room near the room name.
+- Standard authentication exists. Whole chat story is saving in db.
