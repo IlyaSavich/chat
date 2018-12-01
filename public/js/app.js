@@ -57597,7 +57597,7 @@ var content = __webpack_require__(47);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("156b7711", content, false, {});
+var update = __webpack_require__(3)("bf2cea44", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -57780,7 +57780,7 @@ var content = __webpack_require__(53);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("24978ad8", content, false, {});
+var update = __webpack_require__(3)("aface5b6", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -57939,7 +57939,7 @@ var content = __webpack_require__(58);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("24a88859", content, false, {});
+var update = __webpack_require__(3)("0d2623a8", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -58121,7 +58121,7 @@ var content = __webpack_require__(63);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("20fbaa32", content, false, {});
+var update = __webpack_require__(3)("7772de8c", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -58289,7 +58289,7 @@ var content = __webpack_require__(68);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("50457f81", content, false, {});
+var update = __webpack_require__(3)("3ef3c6d4", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -58397,7 +58397,7 @@ if (false) {
 /* 71 */
 /***/ (function(module, exports) {
 
-// removed by extract-text-webpack-plugin
+throw new Error("Module build failed: ModuleBuildError: Module build failed: Error: Missing binding /home/vagrant/chat/node_modules/node-sass/vendor/linux-x64-57/binding.node\nNode Sass could not find a binding for your current environment: Linux 64-bit with Node.js 8.x\n\nFound bindings for the following environments:\n  - Windows 64-bit with Node.js 8.x\n\nThis usually happens because your environment has changed since running `npm install`.\nRun `npm rebuild node-sass` to download the binding for your current environment.\n    at module.exports (/home/vagrant/chat/node_modules/node-sass/lib/binding.js:15:13)\n    at Object.<anonymous> (/home/vagrant/chat/node_modules/node-sass/lib/index.js:14:35)\n    at Module._compile (module.js:652:30)\n    at Object.Module._extensions..js (module.js:663:10)\n    at Module.load (module.js:565:32)\n    at tryModuleLoad (module.js:505:12)\n    at Function.Module._load (module.js:497:3)\n    at Module.require (module.js:596:17)\n    at require (internal/module.js:11:18)\n    at Object.<anonymous> (/home/vagrant/chat/node_modules/sass-loader/lib/loader.js:3:14)\n    at Module._compile (module.js:652:30)\n    at Object.Module._extensions..js (module.js:663:10)\n    at Module.load (module.js:565:32)\n    at tryModuleLoad (module.js:505:12)\n    at Function.Module._load (module.js:497:3)\n    at Module.require (module.js:596:17)\n    at require (internal/module.js:11:18)\n    at loadLoader (/home/vagrant/chat/node_modules/loader-runner/lib/loadLoader.js:13:17)\n    at iteratePitchingLoaders (/home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:169:2)\n    at iteratePitchingLoaders (/home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:165:10)\n    at /home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:173:18\n    at loadLoader (/home/vagrant/chat/node_modules/loader-runner/lib/loadLoader.js:36:3)\n    at iteratePitchingLoaders (/home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:169:2)\n    at iteratePitchingLoaders (/home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:165:10)\n    at /home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:173:18\n    at loadLoader (/home/vagrant/chat/node_modules/loader-runner/lib/loadLoader.js:36:3)\n    at iteratePitchingLoaders (/home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:169:2)\n    at iteratePitchingLoaders (/home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:165:10)\n    at /home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:173:18\n    at loadLoader (/home/vagrant/chat/node_modules/loader-runner/lib/loadLoader.js:36:3)\n    at runLoaders (/home/vagrant/chat/node_modules/webpack/lib/NormalModule.js:195:19)\n    at /home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:364:11\n    at /home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:170:18\n    at loadLoader (/home/vagrant/chat/node_modules/loader-runner/lib/loadLoader.js:27:11)\n    at iteratePitchingLoaders (/home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:169:2)\n    at iteratePitchingLoaders (/home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:165:10)\n    at /home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:173:18\n    at loadLoader (/home/vagrant/chat/node_modules/loader-runner/lib/loadLoader.js:36:3)\n    at iteratePitchingLoaders (/home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:169:2)\n    at iteratePitchingLoaders (/home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:165:10)\n    at /home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:173:18\n    at loadLoader (/home/vagrant/chat/node_modules/loader-runner/lib/loadLoader.js:36:3)\n    at iteratePitchingLoaders (/home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:169:2)\n    at iteratePitchingLoaders (/home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:165:10)\n    at /home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:173:18\n    at loadLoader (/home/vagrant/chat/node_modules/loader-runner/lib/loadLoader.js:36:3)\n    at iteratePitchingLoaders (/home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:169:2)\n    at runLoaders (/home/vagrant/chat/node_modules/loader-runner/lib/LoaderRunner.js:362:2)\n    at NormalModule.doBuild (/home/vagrant/chat/node_modules/webpack/lib/NormalModule.js:182:3)\n    at NormalModule.build (/home/vagrant/chat/node_modules/webpack/lib/NormalModule.js:275:15)\n    at Compilation.buildModule (/home/vagrant/chat/node_modules/webpack/lib/Compilation.js:157:10)\n    at moduleFactory.create (/home/vagrant/chat/node_modules/webpack/lib/Compilation.js:460:10)\n    at factory (/home/vagrant/chat/node_modules/webpack/lib/NormalModuleFactory.js:243:5)\n    at applyPluginsAsyncWaterfall (/home/vagrant/chat/node_modules/webpack/lib/NormalModuleFactory.js:94:13)\n    at /home/vagrant/chat/node_modules/tapable/lib/Tapable.js:268:11\n    at NormalModuleFactory.params.normalModuleFactory.plugin (/home/vagrant/chat/node_modules/webpack/lib/CompatibilityPlugin.js:52:5)\n    at NormalModuleFactory.applyPluginsAsyncWaterfall (/home/vagrant/chat/node_modules/tapable/lib/Tapable.js:272:13)\n    at resolver (/home/vagrant/chat/node_modules/webpack/lib/NormalModuleFactory.js:69:10)\n    at process.nextTick (/home/vagrant/chat/node_modules/webpack/lib/NormalModuleFactory.js:196:7)\n    at _combinedTickCallback (internal/process/next_tick.js:131:7)");
 
 /***/ })
 /******/ ]);

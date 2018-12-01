@@ -1,65 +1,100 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# Installation
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## Install development environment
+Homestead Vagrant box is used in the project for development environment.
+So the first we need to install Vagrant.
 
-## About Laravel
+#### Download & install VitualBox
+https://www.virtualbox.org/wiki/Downloads
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+#### Download & install Vagrant
+https://www.vagrantup.com/downloads.html
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+#### Install & Setup Homestead
+After Vagrant installation you can go to Homestead installation. Following the documentation you need to install and configure your application in Homestead. 
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+https://laravel.com/docs/5.7/homestead#installation-and-setup
 
-## Learning Laravel
+After the installation in your Homestead directory run
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
+    vagrant up
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+**Note!** You need to create folder which will be used as a project folder before will up your homestead. 
 
-## Laravel Sponsors
+## Install project
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
+### Clone repository
+Find a place where you want to store project and clone repository
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
+    git clone git@github.com:IlyaSavich/chat.git
 
-## Contributing
+### Install project packages
+To connect vagrant via ssh in your homestead directory run
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    vagrant ssh
 
-## Security Vulnerabilities
+Then go to project directory into vagrant box, e.g. `~/chat`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    cd ~/chat
 
-## License
+And install php packages
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    composer install
+
+And node modules
+
+    npm install
+
+**Note** if there is some problems with npm will appear then you can try to install npm locally and install these modules locally and use npm locally.
+
+### Install Laravel App
+Laravel Framework is used in the project as framework for backend app.
+Vue.js is used for frontend app.
+
+##### Create `.env` file copy from `.env.example`
+And in `.env` configure connection to DB, e.g.
+
+    DB_DATABASE=chat # DB name from Homestead.yml
+    DB_USERNAME=homestead # default credentials
+    DB_PASSWORD=secret
+
+In project directory in vagrant run
+
+    artisan key:generate (or php artisan key:generate)
+
+##### Configure Pusher WebSocket server
+Pusher is used as a websocket server in the project.
+So first you need to configure driver for broadcasting in `.env`
+
+    BROADCAST_DRIVER=pusher
+
+Also need to configure credentials of Pusher account
+
+    PUSHER_APP_ID=642196
+    PUSHER_APP_KEY=c41184cc19fe08f24b71
+    PUSHER_APP_SECRET=1670ba38642f59d151fa
+    PUSHER_APP_CLUSTER=eu
+    
+    MIX_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
+    MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
+
+##### Setup database
+In project directory in vagrant run
+
+    artisan migrate
+
+##### Build frontend app
+
+    npm run
+
+For development you can run watcher
+
+    npm run watch
+
+### Start using the chat application!
+
+# Usage
+
+For daily usage you only need to run homestead box in your Homestead directory
+
+    vagrant up
