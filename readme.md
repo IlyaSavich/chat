@@ -117,3 +117,33 @@ For daily usage you only need to run homestead box in your Homestead directory
 ### Examples of using patterns
 
 - Laravel framework was used in project which implements MVC pattern (examples, model - `app/Models/Room.php` and all services and repositories listed above, view - `resources/views/chat.blade.php`, controller - `app/Http/Controllers/Api/RoomController.php`), Dependency Injection (examples in services and controller), Middleware pattern (`app/Http/Middleware/RoomOwner.php`), Laravel Facades pattern (example of usage in repository class `app/Repositories/UserRepository.php` in `35`, `Hash` is facade)
+
+## Screenshots
+
+Welcome page:
+
+![Welcome page](https://github.com/IlyaSavich/chat/blob/master/storage/screenshots/welcome.PNG)
+
+Login page:
+
+![Login page](https://github.com/IlyaSavich/chat/blob/master/storage/screenshots/login.PNG)
+
+Registration page:
+
+![Registration page](https://github.com/IlyaSavich/chat/blob/master/storage/screenshots/registration.PNG)
+
+Chat room:
+
+![Chat room](https://github.com/IlyaSavich/chat/blob/master/storage/screenshots/chat.PNG)
+
+New room modal:
+
+![New room modal](https://github.com/IlyaSavich/chat/blob/master/storage/screenshots/new_room.PNG)
+
+New room notification:
+
+![Chat room](https://github.com/IlyaSavich/chat/blob/master/storage/screenshots/new_room_notification.PNG)
+
+Delete room confirmation:
+
+![Chat room](https://github.com/IlyaSavich/chat/blob/master/storage/screenshots/delete_confirmation.PNG)
