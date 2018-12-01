@@ -107,3 +107,13 @@ For daily usage you only need to run homestead box in your Homestead directory
 - If someone will message in not active room (which you are not selected) you will see `!` sign in the Chats list in opposite of room name. Also previewed message will be updated.
 - In opened public room you can see count of users in the room near the room name.
 - Standard authentication exists. Whole chat story is saving in db.
+
+### Examples of using OOP
+
+- All backend logic was separated to specific services which uses Dependency Injection to communicate with each other where it's needed. (examples `app/Services/RegistrationService.php`, `app/Services/RoomService.php`, `app/Services/MessageService.php`)
+- All queries to DB was placed to repository classes. This makes testing of services more easy. (examples, all files in `app/Repositories` folder, e.g. `app/Repositories/RoomRepository.php`)
+- Request validation makes in separated request classes (examples, `app/Http/Requests/CreateMessageRequest.php`)
+
+### Examples of using patterns
+
+- Laravel framework was used in project which implements MVC pattern (examples, model - `app/Models/Room.php` and all services and repositories listed above, view - `resources/views/chat.blade.php`, controller - `app/Http/Controllers/Api/RoomController.php`), Dependency Injection (examples in services and controller), Middleware pattern (`app/Http/Middleware/RoomOwner.php`), Laravel Facades pattern (example of usage in repository class `app/Repositories/UserRepository.php` in `35`, `Hash` is facade)
